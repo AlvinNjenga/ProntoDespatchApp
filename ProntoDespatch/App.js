@@ -8,8 +8,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { mapping, light as lightTheme } from '@eva-design/eva';
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import useLinking from './navigation/useLinking';
+import BottomTabNavigator from './navigation/tabs/BottomTabNavigator';
+import useLinking from './navigation/hooks/useLinking';
+
+import AuthStackNavigator from './navigation/stacks/AuthStackNavigator';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +20,7 @@ export default function App(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
+  const [isSignedIn, setSignedIn] = React.useState(false);
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
@@ -45,6 +48,10 @@ export default function App(props) {
     loadResourcesAndDataAsync();
   }, []);
 
+  // Important stuff goes from here.
+  // Maybe the background for a lot of it will be a triangle type, but it comes and points 
+  // to the left? And I could learn to animate it onto the page.
+
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
   } else {
@@ -53,9 +60,16 @@ export default function App(props) {
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-            <Stack.Navigator>
-              <Stack.Screen name="Root" component={BottomTabNavigator} />
-            </Stack.Navigator>
+            {!isSignedIn && (
+              <AuthStackNavigator setSignedIn={setSignedIn} />
+            )}
+            {isSignedIn && (
+              // TO-DO: Import and render AppDrawer here.
+              <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen name="Root" component={BottomTabNavigator} />
+              </Stack.Navigator>
+              // TO-DO: Import and render AppDrawer here.
+            )}
           </NavigationContainer>
         </View>
       </ApplicationProvider>
