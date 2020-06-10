@@ -5,66 +5,58 @@ import * as WebBrowser from 'expo-web-browser';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import { Input, Button, Avatar } from '@ui-kitten/components';
 
+import Buttons from '../../components/atomic/Button';
+
 const { width } = Dimensions.get('window');
 
-// Potentially do the triangle thing and try make it work
-// as a background?
-// https://codedaily.io/tutorials/22/The-Shapes-of-React-Native
 export default function LoginScreen({ navigation, setSignedIn }) {
     return (
-        <>
-            <View style={styles.container}>
-                <View style={styles.loginContainer}>
-                    <View style={styles.logoWrapper}>
-                        <Image
-                            style={styles.logo}
-                            source={require('../../assets/images/pronto-logo-colour.png')}
+        <View style={styles.container}>
+            <View style={styles.loginContainer}>
+                <View style={styles.logoWrapper}>
+                    <Image
+                        style={styles.logo}
+                        source={require('../../assets/images/pronto-logo-colour.png')}
+                    />
+                </View>
+                <View style={styles.inputGroupWrapper}>
+                    <View style={styles.inputWrapper}>
+                        <Input
+                            size="large"
+                            placeholder="Email..."
+                            style={styles.input}
                         />
                     </View>
-                    <View style={styles.inputGroupWrapper}>
-                        <View style={styles.inputWrapper}>
-                            <Input
-                                size="large"
-                                placeholder="Email..."
-                                style={styles.input}
+                    <View style={styles.inputWrapper}>
+                        <Input
+                            size="large"
+                            placeholder="Password..."
+                            // style={[styles.input, { borderBottomColor: "chartreuse" }]}
+                            style={styles.input}
+                        />
+                        <Text style={{ alignSelf: 'flex-end', marginVertical: 10, color: 'limegreen' }}>Forgot password?</Text>
+                    </View>
+                    {/* Sign in buttons need to have bigger text, and potentially roboto or something. Takes up most of button. */}
+                    <View style={styles.buttonGroup}>
+                        <View style={styles.buttonWrapper}>
+                            <Buttons
+                                title="Sign In"
+                                backgroundColor="green"
+                                hightlightColor="lightgreen"
+                                onPressOut={() => setSignedIn(true)}
                             />
                         </View>
-                        <View style={styles.inputWrapper}>
-                            <Input
-                                size="large"
-                                placeholder="Password..."
-                                // style={[styles.input, { borderBottomColor: "chartreuse" }]}
-                                style={styles.input}
+                        <View style={styles.buttonWrapper}>
+                            <Buttons
+                                title="Register"
+                                backgroundColor="blue"
+                                hightlightColor="lightblue"
                             />
-                            <Text style={{ alignSelf: 'flex-end', marginVertical: 10, color: 'limegreen' }}>Forgot password?</Text>
-                        </View>
-                        {/* Sign in buttons need to have bigger text, and potentially roboto or something. Takes up most of button. */}
-                        <View style={styles.buttonGroup}>
-                            <View style={styles.buttonWrapper}>
-                                <Button
-                                    status='success'
-                                    style={styles.button}
-                                    size='large'
-                                    onPressOut={() => setSignedIn(true)}
-                                >
-                                    Sign In
-                                </Button>
-                            </View>
-                            <View style={styles.buttonWrapper}>
-                                <Button
-                                    status='warning'
-                                    style={styles.button}
-                                    size='large'
-                                    onPressOut={() => navigation.navigate('Register')}
-                                >
-                                    Register
-                                </Button>
-                            </View>
                         </View>
                     </View>
                 </View>
             </View>
-        </>
+        </View>
     );
 }
 
@@ -75,7 +67,7 @@ LoginScreen.navigationOptions = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#FFFFFF',
     },
     loginContainer: {
         flex: 1,
@@ -84,7 +76,6 @@ const styles = StyleSheet.create({
     logoWrapper: {
         flex: 1,
         justifyContent: 'flex-end',
-        // backgroundColor: '#C9DBFF',
         alignItems: 'center'
     },
     logo: {
@@ -100,7 +91,6 @@ const styles = StyleSheet.create({
     },
     inputGroupWrapper: {
         flex: 2,
-        // backgroundColor: '#FFD3C9',
         alignItems: 'center',
         marginTop: "10%"
     },

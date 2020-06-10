@@ -1,52 +1,69 @@
 import * as React from 'react';
+import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../../components/atomic/TabBarIcon';
 import HomeScreen from '../../screens/HomeScreen';
 import LinksScreen from '../../screens/LinksScreen';
 // My custom pages.
-import UpcomingJobsScreen from '../../screens/jobs/UpcomingJobs';
+import DeliveriesScreen from '../../screens/jobs/DeliveriesScreen';
 import RequestQuoteScreen from '../../screens/jobs/RequestQuote';
-import CompletedJobsScreen from '../../screens/jobs/CompletedJobs';
 
-// Potentially replace this (or recreate something similar, with the smooth tabe navigator
-// page thing?)
-
-const BottomTab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Upcoming';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  navigation.setOptions({ headerTitle: getHeaderTitle(route) });
+  navigation.setOptions({
+    headerTitle: getHeaderTitle(route),
+    headerTitleStyle: {
+      fontWeight: 'bold',
+      fontSize: 20,
+    },
+    headerTitleAlign: 'center',
+    headerLeft: () => (
+      <View style={{ paddingLeft: 20 }}>
+        <TabBarIcon focused name="md-menu" />
+      </View>),
+    headerRight: () => (
+      <View style={{ paddingRight: 20 }}>
+        <TabBarIcon focused name="ios-add-circle" />
+      </View>),
+  });
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-      <BottomTab.Screen
-        name="Request"
-        component={RequestQuoteScreen}
-        options={{
-          title: 'Request Quote',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
-        }}
-      />
-      <BottomTab.Screen
+    <Tab.Navigator
+      initialRouteName={INITIAL_ROUTE_NAME}
+      tabBarOptions={{
+        style: { paddingBottom: 14, paddingTop: 14, height: 70, fontWeight: 'bold' }
+      }}
+    >
+      <Tab.Screen
         name="Upcoming"
-        component={UpcomingJobsScreen}
+        component={DeliveriesScreen}
         options={{
-          title: 'Upcoming Jobs',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          title: 'Deliveries',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="logo-dropbox" />,
         }}
       />
-      <BottomTab.Screen
-        name="Completed"
-        component={CompletedJobsScreen}
+      <Tab.Screen
+        name="Settings"
+        component={LinksScreen}
         options={{
-          title: 'Completed Jobs',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          title: 'Settings',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-settings" />,
         }}
       />
-    </BottomTab.Navigator>
+      <Tab.Screen
+        name="Profile"
+        component={LinksScreen}
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
@@ -54,11 +71,9 @@ function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case 'Request':
-      return 'Request a quote';
     case 'Upcoming':
-      return 'See your upcoming jobs';
-    case 'Completed':
-      return 'Assess completed jobs';
+      return 'Deliveries';
+    case 'Settings':
+      return 'Settings';
   }
 }
